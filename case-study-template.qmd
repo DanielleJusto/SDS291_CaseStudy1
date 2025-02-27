@@ -1,6 +1,6 @@
 ---
 title: "Your Informative Title Here"
-author: "your names here"
+author: "Dani Justo and Zoe Khan"
 date: "Case Study 1: March 5, 2025"
 format: 
   pdf:

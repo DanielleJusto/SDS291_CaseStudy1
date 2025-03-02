@@ -19,14 +19,17 @@ format:
 # Introduction
 The 2000 U.S. presidential race was a highly contested election between Al Gore and George W. Bush, with the latter eventually winning by a hair due to Florida voters. However, something strange was afoot: people noticed that the "butterfly" ballot design for Palm Beach county in Florida was associated with a very high vote percentage for another candidate, Pat Buchanan. It was theorized that the ballot design led people to inadvertently vote for Buchanan instead of Gore. Our goal in this report is to analyze the relationship between votes for Bush and Buchanan in order to predict how many votes were potentially miscast.
 
-```{r}
+```{r, echo = FALSE}
 library(tidyverse)
 library(Sleuth2)      
 library(kableExtra) 
 library(performance)
 library(broom)
 library(equatiomatic)
+library(kable)
+```
 
+```{r, echo = FALSE}
 # Loading the case study data
 election <- Sleuth2::ex0825
 
@@ -56,10 +59,39 @@ upper <- exp(7.24)
 equation <- extract_eq(model, use_coefs = TRUE)
 ```
 
+Data Description
 
-_Your written short report should be the first thing your reader encounters in your case study document. While you may choose to label each of the required components/sections of the short report with its own header (see below for an example of creating a header in Quarto), you do not need to do so provided that all of the required information is included. Your report should be self-contained and written in such a way that a quantitatively inclined friend (who has taken or is taking SDS 291) could follow what you did without necessarily knowing anything about the U.S. presidential election of 2000._ 
+## Ask about what summary statistics should be included!!!
 
-_As you write your report, you may wish to reference the guide to typesetting regression lines in Quarto using LaTeX (linked at the top of our class Moodle page), the Quarto help page for formatting documents using Markdown (https://quarto.org/docs/authoring/markdown-basics.html), and the Quarto help page for customizing the output from executed code chunks (https://quarto.org/docs/computations/execution-options.html)._
+For our data analysis, we used the The "Dramatic U.S. Presidential Election of 2000" data set from the `Sleuth2` package. This data set includes the number of votes for Buchanan and Bush in all 67 counties in Florida during the 2000 U.S. presidential election. We want to see if the confusing "butterfly" layout of the ballot used in palm beach county caused the discrepancy in votes between Bush and Buchanan, so we've removed palm beach county from our data set. This allows us to observe relationship between Bush and Buchanan's votes under "normal" circumstances, namely, if the election really hadn't been affected by the ballot.
+
+*I'll talk about these summary statistics here*
+
+```{r, echo = FALSE}
+summary_statistics <- election_wo_pb |> 
+  summarize(mean_bush = mean(Bush2000),
+            mean_buch = mean(Buchanan2000),
+            median_bush = median(Bush2000),
+            median_buch = median(Buchanan2000))
+kable(summary_statistics)
+```
+
+
+The scatter plot displayed below has a correlation coefficient of 0.867, suggesting a strong positive association between the number of votes for Bush and the number of votes for Buchanan. The $R^2$ of the linear regression model is 0.862 indicates that the number of votes for Bush account for 86.2% of the variability in the number of votes for Buchanan.
+
+```{r, echo = FALSE}
+ggplot(data = election_wo_pb, aes(x=Bush2000, 
+                                  y=Buchanan2000))  + 
+  geom_point() + 
+  labs(title = " 2000 election Votes for Bush Vs. Votes for Buchanan in Florida Counties",
+       x = "# of Votes for Bush",
+       y = "# of Votes for Buchanan")
+```
+
+
+*Your written short report should be the first thing your reader encounters in your case study document. While you may choose to label each of the required components/sections of the short report with its own header (see below for an example of creating a header in Quarto), you do not need to do so provided that all of the required information is included. Your report should be self-contained and written in such a way that a quantitatively inclined friend (who has taken or is taking SDS 291) could follow what you did without necessarily knowing anything about the U.S. presidential election of 2000.*
+
+*As you write your report, you may wish to reference the guide to typesetting regression lines in Quarto using LaTeX (linked at the top of our class Moodle page), the Quarto help page for formatting documents using Markdown (https://quarto.org/docs/authoring/markdown-basics.html), and the Quarto help page for customizing the output from executed code chunks (https://quarto.org/docs/computations/execution-options.html).*
 
 ```{r}
 #| include: false
@@ -85,7 +117,7 @@ wine <- Sleuth2::ex0823
 
 ### An example section heading
 
-_When you create plots for your case study report, the `echo: false` chunk option tells Quarto to include the final output of your R commands (in this case, a plot) in your rendered PDF *without* printing the underlying R commands that generated that plot! The message and warning flags both prevent R from printing any additional text with error messages or warnings to the PDF._
+*When you create plots for your case study report, the `echo: false` chunk option tells Quarto to include the final output of your R commands (in this case, a plot) in your rendered PDF without* printing the underlying R commands that generated that plot! The message and warning flags both prevent R from printing any additional text with error messages or warnings to the PDF.
 
 ```{r}
 #| echo: false
@@ -95,11 +127,11 @@ _When you create plots for your case study report, the `echo: false` chunk optio
 wine |> ggplot(aes(x = Wine, y = Mortality)) + geom_point() + ggtitle("Association between wine consumption and mortality rates.")
 ```
 
-_When reporting the results of your regression analysis, I would like you to write out a mathematical description of the main/final population model for the mean. Here is an example of what that might look like:_
+*When reporting the results of your regression analysis, I would like you to write out a mathematical description of the main/final population model for the mean. Here is an example of what that might look like:*
 
 Let $mort_i$ denote the heart disease mortality rate in country $i$ (measured in deaths per 1,000 individuals) and $wine_i$ denote the consumption of wine (measured in liters per person per year). Our final linear regression model is $$E[mort_i | wine_i] = \beta_0 + \beta_1\left(wine_i\right).$$
 
-_You do not need to write out the fitted regression line, but you should (at a minimum) provide a table summarizing the estimated coefficients of the model and their corresponding standard errors, like the one shown below. A print-out from the `summary()` command alone is not sufficient._
+*You do not need to write out the fitted regression line, but you should (at a minimum) provide a table summarizing the estimated coefficients of the model and their corresponding standard errors, like the one shown below. A print-out from the `summary()` command alone is not sufficient.*
 
 ```{r}
 #| echo: false
@@ -118,7 +150,7 @@ wine_lm_table |> kbl(col.names = c("Name for Col. 1", "Name for Col. 2", "Name f
 
 # R Appendix
 
-_Copy and paste all code that you used for your case study into one chunk at the end of your written report. Before submitting your case study, take one final look at the R Appendix and make sure that all code is clearly visible. If you see a line running off the side of the PDF, please split the code over multiple lines using a linebreak. The header at the top of this template should ensure that lines of code are automatically wrapped in your final document._
+*Copy and paste all code that you used for your case study into one chunk at the end of your written report. Before submitting your case study, take one final look at the R Appendix and make sure that all code is clearly visible. If you see a line running off the side of the PDF, please split the code over multiple lines using a linebreak. The header at the top of this template should ensure that lines of code are automatically wrapped in your final document.*
 
 ```{r}
 #| message: FALSE
@@ -154,4 +186,3 @@ wine.lm.table |> kbl(col.names = c("Name for Col. 1", "Name for Col. 2",
                      digits = c(2, 2, 2, 4)) |> 
   kable_classic(full_width = F, latex_options = c("HOLD_position"))
 ```
-

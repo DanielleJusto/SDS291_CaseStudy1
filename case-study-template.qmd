@@ -16,6 +16,8 @@ format:
       - top=1in
       - bottom=1in
 ---
+# Introduction
+The 2000 U.S. presidential race was a highly contested election between Al Gore and George W. Bush, with the latter eventually winning by a hair due to Florida voters. However, something strange was afoot: people noticed that the "butterfly" ballot design for Palm Beach county in Florida was associated with a very high vote percentage for another candidate, Pat Buchanan. It was theorized that the ballot design led people to inadvertently vote for Buchanan instead of Gore. Our goal in this report is to analyze the relationship between votes for Bush and Buchanan in order to predict how many votes were potentially miscast.
 
 ```{r, echo = FALSE}
 library(tidyverse)
@@ -86,6 +88,22 @@ ggplot(data = election_wo_pb, aes(x=Bush2000,
        y = "# of Votes for Buchanan")
 ```
 
+# Modeling Process
+When we explored an initial linear model, we found violations of inference and decided to use a transformed model to rectify this issue. After some experimentation, we found that a double-log transformation satisfied conditions and would allow us to continue with our inquiry. Let $Bush_i$ denote the votes for Bush, and $Buchanan_i$ denote the votes for Buchanan. Our final transformed linear model is $$E[log(Buchanan_i)|log(Bush_i)] = \beta_0 + \beta_1log(Bush_i)$$
+
+The null hypothesis is that there is no relationship between votes for Bush and Buchanan. The alternative hypothesis is there there is a relationship:
+$$H_0 = \beta_1 = 0$$
+$$H_A = \beta_1 \neq 0$$
+The estimates and standard errors of the model parameters are below:
+```{r}
+#| include = false
+
+votes_table <- summary(model)$coefficients
+
+votes_table |> kbl(col.names = c("Estimate", "Std. Error", "t value", "P-value"), align = "c", booktabs = T, linesep="", digits = c(2, 2, 2, 4)) |> kable_classic(full_width = F, latex_options = c("HOLD_position"))
+```
+
+We get a very small p-value (\alpha = 0.05), so we reject the null hypothesis and conclude that there is a relationship between votes for Bush and Buchanan. In our prediction interval, we are 95% confident that an individual county with 152,846 votes for Bush would have between 250 and 1,394 votes for Buchanan. However, the true number of votes for Buchanan was 3,407, which is well out of range of the prediction interval. Taking the difference between the true estimate and the interval values, we might predict that between 1,763 and 3,157 votes were miscast.
 
 *Your written short report should be the first thing your reader encounters in your case study document. While you may choose to label each of the required components/sections of the short report with its own header (see below for an example of creating a header in Quarto), you do not need to do so provided that all of the required information is included. Your report should be self-contained and written in such a way that a quantitatively inclined friend (who has taken or is taking SDS 291) could follow what you did without necessarily knowing anything about the U.S. presidential election of 2000.*
 

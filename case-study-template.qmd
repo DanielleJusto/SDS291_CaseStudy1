@@ -18,20 +18,33 @@ format:
 ---
 
 ```{r}
+library(tidyverse)
+library(Sleuth2)      
+library(kableExtra) 
 library(performance)
 library(broom)
 library(equatiomatic)
 
+# Loading the case study data
+election <- Sleuth2::ex0825
+
+# Creating a second dataset with Palm Beach County excluded
+election_wo_pb <- election |> filter(County != "Palm Beach")
+
+# Creating scatterplot of the linear model
 ggplot(data = election_wo_pb, aes(x = log(Bush2000), y = log(Buchanan2000))) +
   geom_point() +
   labs(x = "Votes for Bush", y = "Votes for Buchanan") +
   geom_smooth(method = lm, se = FALSE)
 
+# Logged model
 model <- lm(log(Buchanan2000) ~ log(Bush2000), data = election_wo_pb)
 summary(model)
 
+# Checking conditions
 check_model(model, check = c("linearity", "homogeneity", "qq"))
 
+# Making prediction interval
 palm_beach <- data.frame(Bush2000 = c(152846))
 augment(model, newdata = palm_beach, interval = "prediction")
 lower <- exp(5.52)

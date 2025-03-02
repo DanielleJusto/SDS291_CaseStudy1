@@ -16,6 +16,8 @@ format:
       - top=1in
       - bottom=1in
 ---
+# Introduction
+The 2000 U.S. presidential race was a highly contested election between Al Gore and George W. Bush, with the latter eventually winning by a hair due to Florida voters. However, something strange was afoot: people noticed that the "butterfly" ballot design for Palm Beach county in Florida was associated with a very high vote percentage for another candidate, Pat Buchanan. It was theorized that the ballot design led people to inadvertently vote for Buchanan instead of Gore. Our goal in this report is to analyze the relationship between votes for Bush and Buchanan in order to predict how many votes were potentially miscast.
 
 ```{r}
 library(tidyverse)

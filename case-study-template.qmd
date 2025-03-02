@@ -26,7 +26,6 @@ library(kableExtra)
 library(performance)
 library(broom)
 library(equatiomatic)
-library(kable)
 ```
 
 ```{r, echo = FALSE}

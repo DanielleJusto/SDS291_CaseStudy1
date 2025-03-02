@@ -17,6 +17,30 @@ format:
       - bottom=1in
 ---
 
+```{r}
+library(performance)
+library(broom)
+library(equatiomatic)
+
+ggplot(data = election_wo_pb, aes(x = log(Bush2000), y = log(Buchanan2000))) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+model <- lm(log(Buchanan2000) ~ log(Bush2000), data = election_wo_pb)
+summary(model)
+
+check_model(model, check = c("linearity", "homogeneity", "qq"))
+
+palm_beach <- data.frame(Bush2000 = c(152846))
+augment(model, newdata = palm_beach, interval = "prediction")
+lower <- exp(5.52)
+fitted <- exp(6.38)
+upper <- exp(7.24)
+
+equation <- extract_eq(model, use_coefs = TRUE)
+```
+
 _Your written short report should be the first thing your reader encounters in your case study document. While you may choose to label each of the required components/sections of the short report with its own header (see below for an example of creating a header in Quarto), you do not need to do so provided that all of the required information is included. Your report should be self-contained and written in such a way that a quantitatively inclined friend (who has taken or is taking SDS 291) could follow what you did without necessarily knowing anything about the U.S. presidential election of 2000._ 
 
 _As you write your report, you may wish to reference the guide to typesetting regression lines in Quarto using LaTeX (linked at the top of our class Moodle page), the Quarto help page for formatting documents using Markdown (https://quarto.org/docs/authoring/markdown-basics.html), and the Quarto help page for customizing the output from executed code chunks (https://quarto.org/docs/computations/execution-options.html)._

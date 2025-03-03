@@ -1,7 +1,7 @@
 ---
-title: "Your Informative Title Here"
+title: "Butterfly Ballot Blunder: An Investigation of the 2000 Presidential Election"
 author: "Dani Justo and Zoe Khan"
-date: "Case Study 1: March 5, 2025"
+date: "March 5, 2025"
 format: 
   pdf:
     keep-tex: true
@@ -19,7 +19,7 @@ format:
 # Introduction
 The 2000 U.S. presidential race was a highly contested election between Al Gore and George W. Bush, with the latter eventually winning by a hair due to Florida voters. However, something strange was afoot: people noticed that the "butterfly" ballot design for Palm Beach county in Florida was associated with a very high vote percentage for another candidate, Pat Buchanan. It was theorized that the ballot design led people to inadvertently vote for Buchanan instead of Gore. Our goal in this report is to analyze the relationship between votes for Bush and Buchanan in order to predict how many votes were potentially miscast.
 
-```{r, echo = FALSE}
+```{r, include = FALSE}
 library(tidyverse)
 library(Sleuth2)      
 library(kableExtra) 
@@ -28,7 +28,7 @@ library(broom)
 library(equatiomatic)
 ```
 
-```{r, echo = FALSE}
+```{r, include = FALSE}
 # Loading the case study data
 election <- Sleuth2::ex0825
 
@@ -58,7 +58,7 @@ upper <- exp(7.24)
 equation <- extract_eq(model, use_coefs = TRUE)
 ```
 
-Data Description
+# Data Description
 
 ## Ask about what summary statistics should be included!!!
 
@@ -94,13 +94,13 @@ The null hypothesis is that there is no relationship between votes for Bush and 
 $$H_0 = \beta_1 = 0$$
 $$H_A = \beta_1 \neq 0$$
 The estimates and standard errors of the model parameters are below:
-```{r}
-#| include : false
-
+```{r echo = FALSE}
 votes_table <- summary(model)$coefficients
 
 votes_table |> kbl(col.names = c("Estimate", "Std. Error", "t value", "P-value"), align = "c", booktabs = T, linesep="", digits = c(2, 2, 2, 4)) |> kable_classic(full_width = F, latex_options = c("HOLD_position"))
 ```
 
 We get a very small p-value (\alpha = 0.05), so we reject the null hypothesis and conclude that there is a relationship between votes for Bush and Buchanan. In our prediction interval, we are 95% confident that an individual county with 152,846 votes for Bush would have between 250 and 1,394 votes for Buchanan. However, the true number of votes for Buchanan was 3,407, which is well out of range of the prediction interval. Taking the difference between the true estimate and the interval values, we might predict that between 1,763 and 3,157 votes were miscast.
+
+# R Appendix
 

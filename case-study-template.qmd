@@ -91,7 +91,7 @@ The summary statistics in the table below suggest that Bush received more votes 
 summary_statistics <- election_wo_pb |> 
   summarize(mean_bush = mean(Bush2000),
             mean_buchanan = mean(Buchanan2000))
-kable(summary_statistics)
+summary_statistics |> kbl(col.names = c("Mean Bush", "Mean Buchanan"), align = "c", booktabs = T, linesep="", digits = c(2, 2)) |> kable_classic(full_width = F, latex_options = c("HOLD_position"))
 ```
 
 The scatter plot displayed below has a correlation coefficient of 0.867, suggesting a strong positive association between the number of votes for Bush and the number of votes for Buchanan. The $R^2$ of the linear regression model is 0.862 indicates that the number of votes for Bush account for 86.2% of the variability in the number of votes for Buchanan.
@@ -151,15 +151,24 @@ election <- Sleuth2::ex0825
 # Creating a second data set with Palm Beach County excluded
 election_wo_pb <- election |> filter(County != "Palm Beach")
 
-# Creating scatter plot of the linear model
-ggplot(data = election_wo_pb, aes(x = log(Bush2000), y = log(Buchanan2000))) +
-  geom_point() +
-  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
-  geom_smooth(method = lm, se = FALSE)
+# Display summary statistics
+summary_statistics <- election_wo_pb |> 
+  summarize(mean_bush = mean(Bush2000),
+            mean_buchanan = mean(Buchanan2000))
+kable(summary_statistics)
 
 # Initial model
 election_model_bad <- lm(Buchanan2000 ~ Bush2000, data = election_wo_pb)
 summary(election_model_bad)
+
+# Display scatter plot of untransformed data 
+ggplot(data = election_wo_pb, aes(x=Bush2000, 
+                                  y=Buchanan2000))  + 
+  geom_point() + 
+  labs(title = "2000 election Votes for Bush Vs. Votes for Buchanan 
+  in Florida Counties",
+       x = "# of Votes for Bush",
+       y = "# of Votes for Buchanan")
 
 # Check conditions for initial model 
 check_model(election_model_bad, check = c("linearity", "homogeneity"))
@@ -169,6 +178,43 @@ election_model_bad |> augment() |> ggplot(aes(sample = .resid)) +
   labs(title = "Normal Quantile Plot",
        x = "Theoretical Quantile",
        y = "Sample Quantile")
+
+# Creating scatter plot sqrt transformed (x)
+ggplot(data = election_wo_pb, aes(x = sqrt(Bush2000), y = Buchanan2000)) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+# Creating scatter plot sqrt transformed (y)
+ggplot(data = election_wo_pb, aes(x = Bush2000, y = sqrt(Buchanan2000))) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+
+# Creating scatter plot sqrt transformed (both)
+ggplot(data = election_wo_pb, aes(x = sqrt(Bush2000), y = sqrt(Buchanan2000))) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+# Creating scatter plot log transformed (x)
+ggplot(data = election_wo_pb, aes(x = log(Bush2000), y = Buchanan2000)) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+# Creating scatter plot log transformed (y)
+ggplot(data = election_wo_pb, aes(x = Bush2000, y = log(Buchanan2000))) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
+
+# Creating scatter plot log transformed (both) (this one wins!)
+ggplot(data = election_wo_pb, aes(x = log(Bush2000), y = log(Buchanan2000))) +
+  geom_point() +
+  labs(x = "Votes for Bush", y = "Votes for Buchanan") +
+  geom_smooth(method = lm, se = FALSE)
 
 # Log Transformed Model
 election_model <- lm(log(Buchanan2000) ~ log(Bush2000), data = election_wo_pb)
@@ -191,21 +237,6 @@ fitted <- exp(6.38)
 upper <- exp(7.24)
 
 equation <- extract_eq(election_model, use_coefs = TRUE)
-
-# Display summary statistics
-summary_statistics <- election_wo_pb |> 
-  summarize(mean_bush = mean(Bush2000),
-            mean_buchanan = mean(Buchanan2000))
-kable(summary_statistics)
-
-# Display scatter plot of untransformed data 
-ggplot(data = election_wo_pb, aes(x=Bush2000, 
-                                  y=Buchanan2000))  + 
-  geom_point() + 
-  labs(title = "2000 election Votes for Bush Vs. Votes for Buchanan 
-  in Florida Counties",
-       x = "# of Votes for Bush",
-       y = "# of Votes for Buchanan")
 
 # Extract coefficients from model 
 votes_table <- summary(election_model)$coefficients

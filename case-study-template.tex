@@ -53,6 +53,46 @@
   \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
@@ -194,15 +234,16 @@ the ballot.
 The summary statistics in the table below suggest that Bush received
 more votes than Buchanan in Florida on average.
 
-\begin{longtable}[]{@{}rrrr@{}}
-\toprule\noalign{}
-mean\_bush & mean\_buchanan & median\_bush & median\_buchanan \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-41696.82 & 210.7576 & 18300 & 111 \\
-\end{longtable}
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{cc}
+\toprule
+Mean Bush & Mean Buchanan\\
+\midrule
+41696.82 & 210.76\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The scatter plot displayed below has a correlation coefficient of 0.867,
 suggesting a strong positive association between the number of votes for
@@ -216,11 +257,12 @@ Buchanan.
 \section{Modeling Process}\label{modeling-process}
 
 When we explored an initial linear model, we found violations of
-inference and decided to use a transformed model to rectify this issue.
-After some experimentation, we found that a double-log transformation
-satisfied conditions and would allow us to continue with our inquiry.
-Let \(Bush_i\) denote the votes for Bush, and \(Buchanan_i\) denote the
-votes for Buchanan. Our final transformed linear model is
+linearity, equal variance, and normality, so we decided to use a
+transformed model to rectify this issue. After some experimentation, we
+found that a double-log transformation satisfied conditions and would
+allow us to continue with our inquiry. Let \(Bush_i\) denote the votes
+for Bush, and \(Buchanan_i\) denote the votes for Buchanan. Our final
+transformed linear model is
 \[E[log(Buchanan_i)|log(Bush_i)] = \beta_0 + \beta_1log(Bush_i)\]
 
 The null hypothesis is that there is no relationship between votes for
@@ -273,6 +315,272 @@ normality plot, but it is slight so we were not concerned that this
 severely violates the normality condition.
 
 \section{R Appendix}\label{r-appendix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Import packages}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(Sleuth2)      }
+\FunctionTok{library}\NormalTok{(kableExtra) }
+\FunctionTok{library}\NormalTok{(performance)}
+\FunctionTok{library}\NormalTok{(broom)}
+\FunctionTok{library}\NormalTok{(equatiomatic)}
+
+\CommentTok{\# Loading the case study data}
+\NormalTok{election }\OtherTok{\textless{}{-}}\NormalTok{ Sleuth2}\SpecialCharTok{::}\NormalTok{ex0825}
+
+\CommentTok{\# Creating a second data set with Palm Beach County excluded}
+\NormalTok{election\_wo\_pb }\OtherTok{\textless{}{-}}\NormalTok{ election }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(County }\SpecialCharTok{!=} \StringTok{"Palm Beach"}\NormalTok{)}
+
+\CommentTok{\# Display summary statistics}
+\NormalTok{summary\_statistics }\OtherTok{\textless{}{-}}\NormalTok{ election\_wo\_pb }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{mean\_bush =} \FunctionTok{mean}\NormalTok{(Bush2000),}
+            \AttributeTok{mean\_buchanan =} \FunctionTok{mean}\NormalTok{(Buchanan2000))}
+\FunctionTok{kable}\NormalTok{(summary\_statistics)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}rr@{}}
+\toprule\noalign{}
+mean\_bush & mean\_buchanan \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+41696.82 & 210.7576 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Initial model}
+\NormalTok{election\_model\_bad }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Buchanan2000 }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Bush2000, }\AttributeTok{data =}\NormalTok{ election\_wo\_pb)}
+\FunctionTok{summary}\NormalTok{(election\_model\_bad)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Buchanan2000 ~ Bush2000, data = election_wo_pb)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-512.43  -47.97  -17.09   41.78  305.45 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 6.557e+01  1.733e+01   3.784 0.000343 ***
+Bush2000    3.482e-03  2.501e-04  13.923  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 112.5 on 64 degrees of freedom
+Multiple R-squared:  0.7518,    Adjusted R-squared:  0.7479 
+F-statistic: 193.8 on 1 and 64 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display scatter plot of untransformed data }
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Bush2000, }
+                                  \AttributeTok{y=}\NormalTok{Buchanan2000))  }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"2000 election Votes for Bush Vs. Votes for Buchanan }
+\StringTok{  in Florida Counties"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"\# of Votes for Bush"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"\# of Votes for Buchanan"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check conditions for initial model }
+\FunctionTok{check\_model}\NormalTok{(election\_model\_bad, }\AttributeTok{check =} \FunctionTok{c}\NormalTok{(}\StringTok{"linearity"}\NormalTok{, }\StringTok{"homogeneity"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{election\_model\_bad }\SpecialCharTok{|\textgreater{}} \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq}\NormalTok{()}\SpecialCharTok{+} 
+  \FunctionTok{geom\_qq\_line}\NormalTok{(}\AttributeTok{col =} \StringTok{"blue"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Normal Quantile Plot"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Theoretical Quantile"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Sample Quantile"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot sqrt transformed (x)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{sqrt}\NormalTok{(Bush2000), }\AttributeTok{y =}\NormalTok{ Buchanan2000)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot sqrt transformed (y)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Bush2000, }\AttributeTok{y =} \FunctionTok{sqrt}\NormalTok{(Buchanan2000))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot sqrt transformed (both)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{sqrt}\NormalTok{(Bush2000), }\AttributeTok{y =} \FunctionTok{sqrt}\NormalTok{(Buchanan2000))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot log transformed (x)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{log}\NormalTok{(Bush2000), }\AttributeTok{y =}\NormalTok{ Buchanan2000)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-7.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot log transformed (y)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Bush2000, }\AttributeTok{y =} \FunctionTok{log}\NormalTok{(Buchanan2000))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-8.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Creating scatter plot log transformed (both) (this one wins!)}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ election\_wo\_pb, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{log}\NormalTok{(Bush2000), }\AttributeTok{y =} \FunctionTok{log}\NormalTok{(Buchanan2000))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Votes for Bush"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Votes for Buchanan"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-9.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Log Transformed Model}
+\NormalTok{election\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(Buchanan2000) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(Bush2000), }\AttributeTok{data =}\NormalTok{ election\_wo\_pb)}
+\FunctionTok{summary}\NormalTok{(election\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = log(Buchanan2000) ~ log(Bush2000), data = election_wo_pb)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.95631 -0.21236  0.02503  0.28102  1.02056 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   -2.34149    0.35442  -6.607 9.07e-09 ***
+log(Bush2000)  0.73096    0.03597  20.323  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4198 on 64 degrees of freedom
+Multiple R-squared:  0.8658,    Adjusted R-squared:  0.8637 
+F-statistic:   413 on 1 and 64 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Checking conditions for transformed model }
+\FunctionTok{check\_model}\NormalTok{(election\_model, }\AttributeTok{check =} \FunctionTok{c}\NormalTok{(}\StringTok{"linearity"}\NormalTok{, }\StringTok{"homogeneity"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-10.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{election\_model }\SpecialCharTok{|\textgreater{}} \FunctionTok{augment}\NormalTok{() }\SpecialCharTok{|\textgreater{}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ .resid)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_qq}\NormalTok{()}\SpecialCharTok{+} 
+  \FunctionTok{geom\_qq\_line}\NormalTok{(}\AttributeTok{col =} \StringTok{"blue"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Normal Quantile Plot"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Theoretical Quantile"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Sample Quantile"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{case-study-template_files/figure-pdf/unnamed-chunk-6-11.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Making prediction interval}
+\NormalTok{palm\_beach }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Bush2000 =} \FunctionTok{c}\NormalTok{(}\DecValTok{152846}\NormalTok{))}
+\FunctionTok{augment}\NormalTok{(election\_model, }\AttributeTok{newdata =}\NormalTok{ palm\_beach, }\AttributeTok{interval =} \StringTok{"prediction"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 1 x 4
+  Bush2000 .fitted .lower .upper
+     <dbl>   <dbl>  <dbl>  <dbl>
+1   152846    6.38   5.52   7.24
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lower }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FloatTok{5.52}\NormalTok{)}
+\NormalTok{fitted }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FloatTok{6.38}\NormalTok{)}
+\NormalTok{upper }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FloatTok{7.24}\NormalTok{)}
+
+\NormalTok{equation }\OtherTok{\textless{}{-}} \FunctionTok{extract\_eq}\NormalTok{(election\_model, }\AttributeTok{use\_coefs =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Extract coefficients from model }
+\NormalTok{votes\_table }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(election\_model)}\SpecialCharTok{$}\NormalTok{coefficients}
+
+\CommentTok{\# Display coefficients in (pretty) table }
+\NormalTok{votes\_table }\SpecialCharTok{|\textgreater{}} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Estimate"}\NormalTok{, }\StringTok{"Std. Error"}\NormalTok{, }\StringTok{"t value"}\NormalTok{, }\StringTok{"P{-}value"}\NormalTok{), }\AttributeTok{align =} \StringTok{"c"}\NormalTok{, }\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{linesep=}\StringTok{""}\NormalTok{, }\AttributeTok{digits =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"HOLD\_position"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{lcccc}
+\toprule
+  & Estimate & Std. Error & t value & P-value\\
+\midrule
+(Intercept) & -2.34 & 0.35 & -6.61 & 0\\
+log(Bush2000) & 0.73 & 0.04 & 20.32 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 
